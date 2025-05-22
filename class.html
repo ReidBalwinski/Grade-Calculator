@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Full Grade</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 2rem auto; }
+    input { padding: 6px; margin: 6px; width: 80px; }
+    label { display: block; margin-top: 10px; }
+    button { padding: 8px 12px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">GPA Calculator</a> |
+    <a href="quarter.html">Quarter Grade</a> |
+    <a href="class.html">Full Grade</a>
+  </nav>
+
+  <h2>Full Grade Calculator</h2>
+
+  <label>Quarter 1 Grade:
+    <input type="number" min="0" max="100" id="q1" />
+  </label>
+
+  <label>Quarter 2 Grade:
+    <input type="number" min="0" max="100" id="q2" />
+  </label>
+
+  <label>Semester 1 Grade (leave blank to auto-calculate):
+    <input type="number" min="0" max="100" id="s1" />
+  </label>
+
+  <label>Quarter 3 Grade:
+    <input type="number" min="0" max="100" id="q3" />
+  </label>
+
+  <label>Quarter 4 Grade:
+    <input type="number" min="0" max="100" id="q4" />
+  </label>
+
+  <label>Semester 2 Grade (leave blank to auto-calculate):
+    <input type="number" min="0" max="100" id="s2" />
+  </label>
+
+  <button onclick="calculateFullGrade()">Calculate Final Grade</button>
+
+  <h3 id="result"></h3>
+
+  <script>
+    function calculateFullGrade() {
+      const q1Val = document.getElementById('q1').value;
+      const q2Val = document.getElementById('q2').value;
+      const q3Val = document.getElementById('q3').value;
+      const q4Val = document.getElementById('q4').value;
+      const s1Val = document.getElementById('s1').value;
+      const s2Val = document.getElementById('s2').value;
+
+      const q1 = q1Val ? parseFloat(q1Val) : null;
+      const q2 = q2Val ? parseFloat(q2Val) : null;
+      const q3 = q3Val ? parseFloat(q3Val) : null;
+      const q4 = q4Val ? parseFloat(q4Val) : null;
+
+      let s1 = s1Val ? parseFloat(s1Val) : null;
+      let s2 = s2Val ? parseFloat(s2Val) : null;
+
+      // Calculate semester grades if not manually provided
+      if (s1 === null && q1 !== null && q2 !== null) {
+        s1 = Math.round((q1 + q2) / 2);
+      }
+
+      if (s2 === null && q3 !== null && q4 !== null) {
+        s2 = Math.round((q3 + q4) / 2);
+      }
+
+      const result = document.getElementById('result');
+
+      if (s1 === null || s2 === null || isNaN(s1) || isNaN(s2)) {
+        result.textContent = "Please provide enough data to compute both semester grades.";
+        return;
+      }
+
+      const finalGrade = Math.round((s1 + s2) / 2);
+      result.textContent = `Semester 1: ${s1}%, Semester 2: ${s2}%, Final Grade: ${finalGrade}%`;
+    }
+  </script>
+
+</body>
+</html>

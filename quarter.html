@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quarter Grade</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 2rem auto; }
+    input { padding: 6px; margin: 6px; width: 80px; }
+    .assignment-row { margin-bottom: 10px; }
+    button { padding: 8px 12px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html">GPA Calculator</a> |
+    <a href="quarter.html">Quarter Grade</a> |
+    <a href="class.html">Full Grade</a>
+  </nav>
+
+  <h2>Quarter Grade Calculator</h2>
+
+  <div id="assignmentContainer">
+    <!-- Assignment rows will be added here -->
+  </div>
+
+  <button onclick="addAssignmentRow()">Add Assignment</button>
+  <button onclick="removeAssignment()">Remove Assignment</button>
+  <button onclick="calculateQuarterGrade()">Calculate Quarter Grade</button>
+
+  <h3 id="quarterGradeResult"></h3>
+
+  <script>
+  function addAssignmentRow() {
+    const container = document.getElementById('assignmentContainer');
+    const div = document.createElement('div');
+    div.className = 'assignment-row';
+
+    div.innerHTML = `
+      Scored: <input type="number" min="0" class="scored" />
+      /
+      Out Of: <input type="number" min="1" class="possible" />
+    `;
+
+    container.appendChild(div);
+  }
+
+  function removeAssignment() {
+    const container = document.getElementById('assignmentContainer');
+    const rows = container.getElementsByClassName('assignment-row');
+    if (rows.length > 1) {
+      container.removeChild(rows[rows.length - 1]);
+    }
+  }
+
+  function calculateQuarterGrade() {
+    const scoredInputs = document.querySelectorAll('.scored');
+    const possibleInputs = document.querySelectorAll('.possible');
+
+    let totalScored = 0;
+    let totalPossible = 0;
+
+    for (let i = 0; i < scoredInputs.length; i++) {
+      const scored = parseFloat(scoredInputs[i].value);
+      const possible = parseFloat(possibleInputs[i].value);
+
+      if (!isNaN(scored) && !isNaN(possible) && possible > 0) {
+        totalScored += scored;
+        totalPossible += possible;
+      }
+    }
+
+    const result = document.getElementById('quarterGradeResult');
+
+    if (totalPossible === 0) {
+      result.textContent = "Please enter valid assignment scores.";
+    } else {
+      let gradePercent = Math.round((totalScored / totalPossible) * 100);
+      gradePercent = Math.min(gradePercent, 100); // Cap at 100%
+      result.textContent = `Quarter Grade: ${gradePercent}%`;
+    }
+  }
+
+  // Add one assignment row by default
+  addAssignmentRow();
+</script>
+
+
+</body>
+</html>
